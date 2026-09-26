@@ -122,7 +122,7 @@ addEventListener('scroll',checkRead,{passive:true});addEventListener('resize',ch
 let pre=null,seenCall=null;
 function prefetchInduction(){if(!pre)pre=new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej).induction()).then(ind=>{ind.pages.forEach(p=>{const i=new Image();i.src=p.data;i.decode().catch(()=>{});});return ind;}).catch(()=>{pre=null;return null;});return pre;}
 const quiet=(name,args)=>new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[name](...args));
-async function loadMaterial(){show('material');read=new Set();$('pages').replaceChildren();$('retryWrap').hidden=true;$('skeleton').hidden=false;updateRead();const have=pre?await pre:null;
+async function loadMaterial(){show('material');read=new Set();$('pages').replaceChildren();$('retryWrap').hidden=true;$('skeleton').hidden=false;updateRead();/* A background download that stalls (poor signal) must not hold the screen: after 8s fetch the pages directly instead. */const have=pre?await Promise.race([pre,new Promise(r=>setTimeout(()=>r(null),8000))]):null;
 /* Already downloaded: show it now and tell the server in the background. It only sends pages back if the induction has changed since. */
 if(have){seenCall=quiet('material',[token,have.id]).then(r=>{if(r.pages)return renderPages(r.pages);});seenCall.catch(()=>{});await renderPages(have.pages);return;}
 let r;try{r=await rpc('material',[token,null],'Loading induction…');}catch(e){$('skeleton').hidden=true;$('retryWrap').hidden=false;return;}seenCall=null;await renderPages(r.pages);}
