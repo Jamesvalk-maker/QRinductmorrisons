@@ -1,5 +1,5 @@
 /** Latimer Park contractor sign-in. TEST mode until explicitly enabled. */
-const CFG = Object.freeze({sheetId:'1m7L2No_CJNYsSdxDekdV_xmHk9Z6mnJAn7Uljoqe9Js',formId:'1a_q2c_o70Xmtn1wqz9j5xVq-Ct8EGjXZAiHoZ6FK7ys',site:'Latimer Park',zone:'Europe/London',version:'2026-09-26-v1',live:false});
+const CFG = Object.freeze({sheetId:'1m7L2No_CJNYsSdxDekdV_xmHk9Z6mnJAn7Uljoqe9Js',formId:'1a_q2c_o70Xmtn1wqz9j5xVq-Ct8EGjXZAiHoZ6FK7ys',site:'Latimer Park',zone:'Europe/London',version:'2026-09-26-v1',live:true});
 /* [question, correct answer, wrong answers]. The phone shuffles the options; only the server knows which is correct. */
 const QUIZ = [
  ['What colour are the internal and external pedestrian walkways?', 'Yellow', ['Green', 'White', 'Blue']],
