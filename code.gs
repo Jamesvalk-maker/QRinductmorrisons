@@ -17,13 +17,13 @@ const QUIZ_LATIMER = [
 const SITES = {
   latimer:      {name:'Latimer Park', sheetId:'1m7L2No_CJNYsSdxDekdV_xmHk9Z6mnJAn7Uljoqe9Js', formId:'1a_q2c_o70Xmtn1wqz9j5xVq-Ct8EGjXZAiHoZ6FK7ys', quiz:QUIZ_LATIMER, areas:[], reportTo:'Please make yourself known to a manager in Ambient or Fresh before proceeding.', permitContact:'a manager from the Senior Team or the Ambient / Fresh warehouse'},
   corby:        {name:'Corby Freezer', sheetId:'', formId:'1AyUOHykNbdUmnv13TfWYwEjay-b-v6N5rjEseyRnZis', quiz:null, areas:[]},
-  swanvalley1:  {name:'Swan Valley 1', sheetId:'', formId:'', quiz:null, areas:[]},
-  swanvalley3:  {name:'Swan Valley 3', sheetId:'', formId:'', quiz:null, areas:[]},
-  sittingbourne:{name:'Sittingbourne', sheetId:'', formId:'', quiz:null, areas:['Ambient','Fresh']},
-  willowgreen:  {name:'Willow Green', sheetId:'', formId:'', quiz:null, areas:['Main Site','Produce']},
-  gadbrook:     {name:'Gadbrook', sheetId:'', formId:'', quiz:null, areas:[]},
-  wakefield:    {name:'Wakefield', sheetId:'', formId:'', quiz:null, areas:['Ambient','Fresh','Grandstand','Freezer']},
-  stockton:     {name:'Stockton', sheetId:'', formId:'', quiz:null, areas:[]}
+  swanvalley1:  {name:'Swan Valley 1', sheetId:'', formId:'19ft-6L4Dlya21qzHzPJee1vso_RfyvxQrSfSnZPWDNo', quiz:null, areas:[]},
+  swanvalley3:  {name:'Swan Valley 3', sheetId:'', formId:'1kfmI-yvZeRy144DYLCg_BeT5CigTzximA4Ue6OxcEEs', quiz:null, areas:[]},
+  sittingbourne:{name:'Sittingbourne', sheetId:'', formId:'1G80M_vJx65dFAzQhjAsXXop9TR_g2-ioH48cUnvRP7M', quiz:null, areas:['Ambient','Fresh']},
+  willowgreen:  {name:'Willow Green', sheetId:'', formId:'1eTZqx3fgia5kcxq7Xvh1rum7gLicnrR94L0XoGp2Tj4', quiz:null, areas:['Main Site','Produce']},
+  gadbrook:     {name:'Gadbrook', sheetId:'', formId:'1ePLxn-600l2Q08Jp0ugMqkWmo_V604r-dHxnwEhwnBU', quiz:null, areas:[]},
+  wakefield:    {name:'Wakefield', sheetId:'', formId:'15RzVHfNMuFUjZ56QfxwfLvoBjv82cUzwQ-lJffcwU5E', quiz:null, areas:['Ambient','Fresh','Grandstand','Freezer']},
+  stockton:     {name:'Stockton', sheetId:'', formId:'1Cdqd3846h4TBvXoGcRxFuP06kRXnQsEy54ApjeuXFPQ', quiz:null, areas:[]}
 };
 function site_(key){const k=String(key||CFG.defaultSite).trim().toLowerCase(),s=SITES[k];if(!s)throw Error('This QR code is not recognised. Please scan the code at the site entrance again.');return Object.assign({key:k,areas:[]},s);}
 function sheetId_(site){return site.sheetId||PropertiesService.getScriptProperties().getProperty('sheet:'+site.key)||'';}
