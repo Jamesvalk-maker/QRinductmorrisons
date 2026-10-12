@@ -86,11 +86,24 @@ body:before{background-image:linear-gradient(rgba(0,82,59,.05) 1px,transparent 1
 #track i{background:rgba(255,255,255,.25)}
 .ghost{background:#ffffff}
 .saved .tap,.saved .chev{color:#00523b}
+
+/* Wrong-answer alarm: deliberately over the top so a failed quiz cannot be missed. The shake is applied to the header, results and bottom bar individually, because shaking a parent would unpin the fixed bottom bar. */
+@keyframes quake{0%,100%{transform:none}8%,24%,40%,56%,72%{transform:translate(-14px,3px) rotate(-1.2deg)}16%,32%,48%,64%,80%{transform:translate(14px,-3px) rotate(1.2deg)}88%{transform:translate(-5px,0)}}
+.quake{animation:quake .9s cubic-bezier(.36,.07,.19,.97) both}
+#flash{position:fixed;inset:0;z-index:30;pointer-events:none;opacity:0;background:radial-gradient(circle at center,rgba(255,40,50,.25),rgba(220,20,35,.75));box-shadow:inset 0 0 120px 40px rgba(200,0,20,.9)}
+#flash.on{animation:flash 1.1s ease-out}
+@keyframes flash{0%,30%,60%{opacity:0}10%,40%{opacity:1}70%{opacity:.8}100%{opacity:0}}
+#stamp{position:fixed;left:50%;top:42%;z-index:31;pointer-events:none;opacity:0;transform:translate(-50%,-50%) rotate(-12deg);font-family:var(--head);font-size:clamp(64px,22vw,120px);letter-spacing:4px;line-height:1;white-space:nowrap;color:#fff;background:#d50f25;border:6px solid #fff;outline:4px solid #d50f25;border-radius:14px;padding:10px 26px 4px;box-shadow:0 20px 60px rgba(120,0,10,.6)}
+#stamp.on{animation:stamp 1.6s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-30deg) scale(3.2)}18%{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}24%{transform:translate(-50%,-50%) rotate(-12deg) scale(1.08)}30%,75%{opacity:1;transform:translate(-50%,-50%) rotate(-12deg) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(.9)}}
+#results.quake .bad{animation:badrow .45s ease 3}
+@keyframes badrow{0%,100%{background:transparent;transform:none}50%{background:rgba(213,15,37,.22);transform:translateX(8px)}}
+.score.wrong strong{color:#d50f25!important;text-shadow:0 0 24px rgba(213,15,37,.45)!important}
 </style></head><body>
 <div id="splash" aria-hidden="true"><div class="lo-orb lo-orb1"></div><div class="lo-orb lo-orb2"></div><div class="lo-scan"></div><div class="lo-corner lo-tl"></div><div class="lo-corner lo-tr"></div><div class="lo-corner lo-bl"></div><div class="lo-corner lo-br"></div><div class="lo-content"><div class="lo-ring"></div><div class="lo-title"><span class="lo-ch" style="animation-delay:0.20s">V</span><span class="lo-ch" style="animation-delay:0.28s">A</span><span class="lo-ch" style="animation-delay:0.36s">N</span><span class="lo-ch" style="animation-delay:0.44s">G</span><span class="lo-ch" style="animation-delay:0.52s">U</span><span class="lo-ch" style="animation-delay:0.60s">A</span><span class="lo-ch" style="animation-delay:0.68s">R</span><span class="lo-ch" style="animation-delay:0.76s">D</span></div><div class="lo-line"></div><div class="lo-sub">Contractor &amp; Visitor Sign In</div><div class="lo-co">Morrisons Logistics · Latimer Park</div><div class="lo-track"><div class="lo-fill"></div></div><div class="lo-msg" id="splashMsg">Connecting…</div></div></div>
 <div class="orb orb-1"></div><div class="orb orb-2"></div>
 <header class="appbar"><div class="appbar-in"><div class="brand"><span class="logo" role="img" aria-label="Morrisons Health &amp; Safety"></span><div><small>Morrisons Logistics</small><strong>Latimer Park</strong></div></div><span id="mode" class="pill" hidden></span></div><div id="steps" hidden><div id="track"></div></div></header>
-<div id="busy" role="status" aria-live="polite">Loading…</div>
+<div id="flash" aria-hidden="true"></div><div id="stamp" aria-hidden="true">✗ WRONG</div><div id="busy" role="status" aria-live="polite">Loading…</div>
 <main><div id="message" role="alert" hidden></div>
 
 <section id="identity" hidden><p class="step" id="stepLabel"></p><h1 class="title">Welcome to Latimer Park</h1><p class="lead">Sign in when you arrive and sign out before you leave. Everyone signs in on their own phone.</p>
@@ -179,13 +192,14 @@ function renderQuiz(animate){if($('quiz').hidden)return;const q=quiz.order[quiz.
 if(quiz.mode==='ask'){$('meter').style.width=(100*quiz.pos/(n+1))+'%';$('qCount').textContent=(quiz.retry?'Retry · question ':'Question ')+(quiz.pos+1)+' of '+n;$('qText').textContent=cfg.questions[q].text;$('qOptions').replaceChildren(...quiz.options[q].map(o=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('role','radio');b.setAttribute('aria-checked',String(quiz.answers[q]===o));b.textContent=o;b.disabled=busy;b.onclick=()=>choose(q,o);return b;}));back.textContent=quiz.pos?'Back':'Induction';next.textContent=quiz.pos===n-1?'Continue':'Next';next.disabled=busy||quiz.answers[q]==null;if(animate){$('ask').classList.remove('enter');void $('ask').offsetWidth;$('ask').classList.add('enter');}}
 else if(quiz.mode==='declare'){$('meter').style.width=(100*n/(n+1))+'%';back.textContent='Back';next.textContent='Complete induction';next.disabled=busy||!$('declaration').checked;}
 else{$('meter').style.width='100%';const total=cfg.questions.length;$('score').textContent=total-quiz.incorrect.length;$('scoreOf').textContent='of '+total+' correct';$('resultList').replaceChildren(...cfg.questions.map((x,i)=>{const li=document.createElement('li'),ok=!quiz.incorrect.includes(i+1),b=document.createElement('b'),t=document.createElement('span');li.className=ok?'ok':'bad';b.textContent=ok?'Correct':'Wrong';t.textContent=x.text;li.append(b,t);return li;}));back.textContent='Induction';next.textContent='Retry '+quiz.incorrect.length+' question'+(quiz.incorrect.length>1?'s':'');next.disabled=busy;}}
+function wrongAlarm(){const els=[document.querySelector('.appbar'),$('results'),$('quiz').querySelector('.meter'),$('quiz').querySelector('.bar')];document.querySelector('.score').classList.add('wrong');[...els,$('flash'),$('stamp')].forEach(e=>{e.classList.remove('quake','on');void e.offsetWidth;});els.forEach(e=>e.classList.add('quake'));$('flash').classList.add('on');$('stamp').classList.add('on');try{navigator.vibrate&&navigator.vibrate([150,60,150,60,300]);}catch(e){}setTimeout(()=>els.forEach(e=>e.classList.remove('quake')),1500);}
 function choose(q,o){if(busy)return;quiz.answers[q]=o;renderQuiz(false);clearTimeout(quiz.timer);quiz.timer=setTimeout(()=>{if(quiz.mode==='ask'&&quiz.order[quiz.pos]===q)advance();},350);}
 function advance(){clearTimeout(quiz.timer);if(quiz.pos<quiz.order.length-1)quiz.pos++;else quiz.mode='declare';renderQuiz(true);}
 $('declaration').onchange=()=>renderQuiz(false);
 $('qBack').onclick=()=>{if(busy)return;clearTimeout(quiz.timer);if(quiz.mode==='results'||(quiz.mode==='ask'&&!quiz.pos)){show('material');updateRead();return;}if(quiz.mode==='declare')quiz.mode='ask';else quiz.pos--;renderQuiz(true);};
 $('qNext').onclick=async()=>{if(busy)return;if(quiz.mode==='ask'){if(quiz.answers[quiz.order[quiz.pos]]!=null)advance();return;}if(quiz.mode==='results'){quiz.order=quiz.incorrect.map(i=>i-1);quiz.order.forEach(i=>quiz.answers[i]=null);Object.assign(quiz,{pos:0,mode:'ask',retry:true});renderQuiz(true);return;}
 if(seenCall){try{await seenCall;}catch(e){try{await rpc('material',[token,null],'Checking…');}catch(e2){return;}}seenCall=null;}
-try{const r=await rpc('completeInduction',[token,quiz.answers,$('declaration').checked],'Checking answers…');if(r.ok){visit(true);return;}quiz.incorrect=r.incorrect;quiz.mode='results';renderQuiz(true);}catch(e){}};
+try{const r=await rpc('completeInduction',[token,quiz.answers,$('declaration').checked],'Checking answers…');if(r.ok){visit(true);return;}quiz.incorrect=r.incorrect;quiz.mode='results';renderQuiz(true);wrongAlarm();}catch(e){}};
 $('toQuiz').onclick=()=>{if(busy||read.size!==slideTotal)return;show('quiz');renderQuiz(true);};
 $('retry').onclick=()=>{if(!busy)loadMaterial();};
 
