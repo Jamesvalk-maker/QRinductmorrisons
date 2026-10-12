@@ -86,6 +86,10 @@ body:before{background-image:linear-gradient(rgba(0,82,59,.05) 1px,transparent 1
 #track i{background:rgba(255,255,255,.25)}
 .ghost{background:#ffffff}
 .saved .tap,.saved .chev{color:#00523b}
+/* Selected box: dark green border inside a bright yellow ring, with the label turning green, so the active box stands out on the mint. The inset shadow thickens the border without shifting the layout. */
+input:focus,textarea:focus,.tel:focus-within{border-color:#00523b!important;background:#fff!important;box-shadow:inset 0 0 0 1px #00523b,0 0 0 4px rgba(255,186,1,.65)!important}
+.field:focus-within>label,.field:focus-within>.lbl{color:#00523b}
+.tel input:focus{box-shadow:none!important}
 </style></head><body>
 <div id="splash" aria-hidden="true"><div class="lo-orb lo-orb1"></div><div class="lo-orb lo-orb2"></div><div class="lo-scan"></div><div class="lo-corner lo-tl"></div><div class="lo-corner lo-tr"></div><div class="lo-corner lo-bl"></div><div class="lo-corner lo-br"></div><div class="lo-content"><div class="lo-ring"></div><div class="lo-title"><span class="lo-ch" style="animation-delay:0.20s">V</span><span class="lo-ch" style="animation-delay:0.28s">A</span><span class="lo-ch" style="animation-delay:0.36s">N</span><span class="lo-ch" style="animation-delay:0.44s">G</span><span class="lo-ch" style="animation-delay:0.52s">U</span><span class="lo-ch" style="animation-delay:0.60s">A</span><span class="lo-ch" style="animation-delay:0.68s">R</span><span class="lo-ch" style="animation-delay:0.76s">D</span></div><div class="lo-line"></div><div class="lo-sub">Contractor &amp; Visitor Sign In</div><div class="lo-co">Morrisons Logistics · Latimer Park</div><div class="lo-track"><div class="lo-fill"></div></div><div class="lo-msg" id="splashMsg">Connecting…</div></div></div>
 <div class="orb orb-1"></div><div class="orb orb-2"></div>
