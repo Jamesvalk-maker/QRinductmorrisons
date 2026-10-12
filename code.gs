@@ -14,12 +14,12 @@ const QUIZ_LATIMER = [
    areas: optional list shown as a drop-down on sign-in, saved with each sign-in and counted per area on On Site Now.
    inductionSection: optional title of the Form section holding the slides, if the Form has other images too.
    reportTo: message after a contractor signs in (default names the chosen area, or the site manager). permitContact: who to see about a permit to work. */
-/* Every site uses Latimer Park's answers (confirmed by the sites). The Swan Valley sites have no ammonia alarm, and Swan Valley 1's Form has no fire alarm question either. */
-const QUIZ_NO_AMMONIA=QUIZ_LATIMER.filter(q=>!/ammonia/i.test(q[0])),QUIZ_NO_ALARMS=QUIZ_LATIMER.filter(q=>!/alarm/i.test(q[0]));
+/* Every site uses Latimer Park's answers (confirmed by the sites). The Swan Valley sites have no ammonia alarm, so they skip that question. */
+const QUIZ_NO_AMMONIA=QUIZ_LATIMER.filter(q=>!/ammonia/i.test(q[0]));
 const SITES = {
   latimer:      {name:'Latimer Park', sheetId:'1m7L2No_CJNYsSdxDekdV_xmHk9Z6mnJAn7Uljoqe9Js', formId:'1a_q2c_o70Xmtn1wqz9j5xVq-Ct8EGjXZAiHoZ6FK7ys', quiz:QUIZ_LATIMER, areas:[], reportTo:'Please make yourself known to a manager in Ambient or Fresh before proceeding.', permitContact:'a manager from the Senior Team or the Ambient / Fresh warehouse'},
   corby:        {name:'Corby Freezer', sheetId:'', formId:'1AyUOHykNbdUmnv13TfWYwEjay-b-v6N5rjEseyRnZis', quiz:QUIZ_LATIMER, areas:[], reportTo:'Please make yourself known to a manager (orange hi-vis) before proceeding.'},
-  swanvalley1:  {name:'Swan Valley 1', sheetId:'', formId:'19ft-6L4Dlya21qzHzPJee1vso_RfyvxQrSfSnZPWDNo', quiz:QUIZ_NO_ALARMS, areas:[], reportTo:'Please make yourself known to a manager in Ambient (orange hi-vis) before proceeding.'},
+  swanvalley1:  {name:'Swan Valley 1', sheetId:'', formId:'19ft-6L4Dlya21qzHzPJee1vso_RfyvxQrSfSnZPWDNo', quiz:QUIZ_NO_AMMONIA, areas:[], reportTo:'Please make yourself known to a manager in Ambient (orange hi-vis) before proceeding.'},
   swanvalley3:  {name:'Swan Valley 3', sheetId:'', formId:'1kfmI-yvZeRy144DYLCg_BeT5CigTzximA4Ue6OxcEEs', quiz:QUIZ_NO_AMMONIA, areas:[]},
   sittingbourne:{name:'Sittingbourne', sheetId:'', formId:'1G80M_vJx65dFAzQhjAsXXop9TR_g2-ioH48cUnvRP7M', quiz:QUIZ_LATIMER, areas:['Ambient','Fresh']},
   willowgreen:  {name:'Willow Green', sheetId:'', formId:'1eTZqx3fgia5kcxq7Xvh1rum7gLicnrR94L0XoGp2Tj4', quiz:QUIZ_LATIMER, areas:['Main Site','Produce']},
